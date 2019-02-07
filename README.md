@@ -1,1 +1,0 @@
-XamarinApp11Mvvm
