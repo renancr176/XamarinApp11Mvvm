@@ -9,14 +9,16 @@ namespace XamarinApp11Mvvm.Enums
     {
         public int Id { get; private set; }
         public string Descricao { get; private set; }
+        public short Pontos { get; private set; }
 
         protected BaseNivelEnum()
         { }
 
-        protected BaseNivelEnum(int id, string descricao)
+        protected BaseNivelEnum(int id, string descricao, short pontos)
         {
             Id = id;
             Descricao = descricao;
+            Pontos = pontos;
         }
 
         public override string ToString() => Descricao;

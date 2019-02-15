@@ -3,33 +3,66 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="XamarinApp11Mvvm.Views.InicioView">
     <ContentPage.Content>
-        <ScrollView Padding="10">
-            <TableView>
-                <TableRoot>
-                    <TableSection>
-                        <EntryCell x:Name="InputGrupo1" 
-                                   Label="Nome Grupo 1"></EntryCell>
-                        <EntryCell x:Name="InputGrupo2" 
-                                   Label="Nome Grupo 2"></EntryCell>
-                        <ViewCell>
-                            <StackLayout>
-                                <Label Text="Nível"></Label>
-                                <Picker x:Name="PickerNivel"></Picker>
-                            </StackLayout>
-                        </ViewCell>
-                        <EntryCell x:Name="InputTempoPalavra"
-                                   Label="Tempo de cada palavra"
-                                   Keyboard="Numeric"></EntryCell>
-                        <EntryCell x:Name="InputRodadas"
-                                   Label="Rodadas"
-                                   Keyboard="Numeric"></EntryCell>
-                        <ViewCell>
-                            <Button Text="Iniciar"
-                                    Style="{StaticResource BtnPrimary}"></Button>
-                        </ViewCell>
-                    </TableSection>
-                </TableRoot>
-            </TableView>
+        <ScrollView>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <StackLayout Grid.Row="0"
+                             Grid.Column="0"
+                             Padding="10">
+                    <Label Text="Nome Grupo 1"></Label>
+                    <Entry x:Name="InputGrupo1"
+                           Text="{Binding Jogo.Grupos[0].Nome}"></Entry>
+                </StackLayout>
+
+                <StackLayout Grid.Row="1"
+                             Grid.Column="0"
+                             Padding="10">
+                    <Label Text="Nome Grupo 2"></Label>
+                    <Entry x:Name="InputGrupo2"
+                           Text="{Binding Jogo.Grupos[1].Nome}"></Entry>
+                </StackLayout>
+
+                <StackLayout Grid.Row="2"
+                             Grid.Column="0"
+                             Padding="10">
+                    <Label Text="Nível"></Label>
+                    <Picker x:Name="PickerNivel"
+                            ItemsSource="{Binding NivelEnums}"
+                            SelectedItem="{Binding Jogo.Nivel}"></Picker>
+                </StackLayout>
+
+                <StackLayout Grid.Row="3"
+                             Grid.Column="0"
+                             Padding="10">
+                    <Label Text="Tempo de resposta"></Label>
+                    <Entry x:Name="InputTempoPalavra"
+                           Keyboard="Numeric"
+                           Text="{Binding Jogo.TempoPalavra}"></Entry>
+                </StackLayout>
+
+                <StackLayout Grid.Row="4"
+                             Grid.Column="0"
+                             Padding="10">
+                    <Label Text="Rodadas"></Label>
+                    <Entry x:Name="InputRodadas"
+                           Keyboard="Numeric"
+                           Text="{Binding Jogo.Rodadas}"></Entry>
+                </StackLayout>
+
+                <StackLayout Grid.Row="5"
+                             Grid.Column="0"
+                             Padding="10">
+                    <Button Text="Iniciar"
+                            Command="{Binding IniciarCommand}"
+                            Style="{StaticResource BtnPrimary}"
+                            FontAttributes="Bold"
+                            HorizontalOptions="CenterAndExpand"></Button>
+                </StackLayout>
+                
+            </Grid>
         </ScrollView>
     </ContentPage.Content>
 </ContentPage>

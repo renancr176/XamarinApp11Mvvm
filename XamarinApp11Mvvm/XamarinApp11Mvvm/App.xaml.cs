@@ -1,6 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using XamarinApp11Mvvm.Views;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace XamarinApp11Mvvm
@@ -11,7 +12,7 @@ namespace XamarinApp11Mvvm
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new InicioView();
         }
 
         protected override void OnStart()

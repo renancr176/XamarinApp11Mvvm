@@ -3,24 +3,26 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="XamarinApp11Mvvm.Views.JogoView">
     <ContentPage.Content>
-        <ScrollView Padding="10">
-            <StackLayout>
-                <Label x:Name="LblGrupo"></Label>
+        <ScrollView>
+            <StackLayout Padding="10">
+                <Label Text="{Binding NomeGrupo}"></Label>
                 <Frame BorderColor="Black">
                     <StackLayout>
-                        <Label x:Name="LblPontuacaoGrupo"
+                        <Label Text="{Binding PalavraPontuacao}"
                                HorizontalOptions="CenterAndExpand"></Label>
-                        <Label x:Name="LblPalavra"
+                        <Label Text="{Binding Palavra}" 
                                FontSize="Medium"
                                HorizontalOptions="CenterAndExpand"
                                VerticalOptions="CenterAndExpand"></Label>
                         <Button Text="Mostrar"
-                                Style="{StaticResource BtnWarning}"></Button>
+                                IsVisible="{Binding BtnMostrarExibido}"
+                                Style="{StaticResource BtnWarning}"
+                                Command="{Binding MostrarCommand}"
+                                HorizontalOptions="CenterAndExpand"></Button>
                     </StackLayout>
                 </Frame>
-                <StackLayout x:Name="ConteudoJogoValendo" 
-                             IsVisible="False">
-                    <Label x:Name="LblTempo"
+                <StackLayout IsVisible="{Binding ConteudoJogoValendo}">
+                    <Label Text="{Binding TempoPalavra}"
                            HorizontalOptions="CenterAndExpand"
                            FontSize="Large"></Label>
                     <Label Text="seg"
@@ -29,17 +31,20 @@
                     <StackLayout Orientation="Horizontal">
                         <Button Text="Acertou"
                                 Style="{StaticResource BtnSuccess}"
-                                HorizontalOptions="CenterAndExpand"></Button>
+                                HorizontalOptions="CenterAndExpand"
+                                Command="{Binding AcertouCommand}"></Button>
                         <Button Text="Errou"
                                 Style="{StaticResource BtnDanger}"
-                                HorizontalOptions="CenterAndExpand"></Button>
+                                HorizontalOptions="CenterAndExpand"
+                                Command="{Binding ErrouCommand}"></Button>
                     </StackLayout>
                 </StackLayout>
-                <Button x:Name="BtnIniciar" 
+                <Button IsVisible="{Binding ConteudoExibido}"
                         Text="Iniciar"
                         Style="{StaticResource BtnPrimary}"
                         HorizontalOptions="CenterAndExpand"
-                        VerticalOptions="CenterAndExpand"></Button>
+                        VerticalOptions="CenterAndExpand"
+                        Command="{Binding IniciarCommand}"></Button>
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>
