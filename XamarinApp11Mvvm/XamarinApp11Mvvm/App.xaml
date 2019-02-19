@@ -4,6 +4,11 @@
              x:Class="XamarinApp11Mvvm.App">
     <Application.Resources>
         <ResourceDictionary>
+            <Color x:Key="Primary">#007bff</Color>
+            <Color x:Key="Success">#28a745</Color>
+            <Color x:Key="Info">#17a2b8</Color>
+            <Color x:Key="Warning">#ffc107</Color>
+            <Color x:Key="Danger">#dc3545</Color>
             <Style TargetType="Label" x:Key="TextPrimary">
                 <Setter Property="TextColor" Value="#007bff"></Setter>
             </Style>

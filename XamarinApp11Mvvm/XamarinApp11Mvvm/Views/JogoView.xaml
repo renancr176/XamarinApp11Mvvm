@@ -1,19 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:conv="clr-namespace:XamarinApp11Mvvm.ViewsModels"
              x:Class="XamarinApp11Mvvm.Views.JogoView">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <conv:PontuacaoPalavraConvert x:Key="pontuacaoPalavraConvert"></conv:PontuacaoPalavraConvert>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <ScrollView>
             <StackLayout Padding="10">
                 <Label Text="{Binding NomeGrupo}"></Label>
                 <Frame BorderColor="Black">
                     <StackLayout>
-                        <Label Text="{Binding PalavraPontuacao}"
+                        <Label Text="{Binding Palavra.NivelDificuldade.Pontos, Converter={StaticResource pontuacaoPalavraConvert}}"
                                HorizontalOptions="CenterAndExpand"></Label>
-                        <Label Text="{Binding Palavra}" 
-                               FontSize="Medium"
+                        <Label Text="{Binding Palavra.Palavra}" 
+                               FontSize="Large"
                                HorizontalOptions="CenterAndExpand"
                                VerticalOptions="CenterAndExpand"></Label>
+                        <Label Text="{Binding Palavra.Significado}"
+                               IsVisible="{Binding LblSignificadoExibido}"
+                               FontSize="Small"
+                               HorizontalOptions="FillAndExpand"></Label>
                         <Button Text="Mostrar"
                                 IsVisible="{Binding BtnMostrarExibido}"
                                 Style="{StaticResource BtnWarning}"

@@ -1,5 +1,6 @@
 ﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using XamarinApp11Mvvm.ViewsModels;
 
 namespace XamarinApp11Mvvm.Views
 {
@@ -9,6 +10,8 @@ namespace XamarinApp11Mvvm.Views
 		public ResultadoView ()
 		{
 			InitializeComponent ();
-		}
+
+            BindingContext = new ResultadoViewModel();
+        }
 	}
 }

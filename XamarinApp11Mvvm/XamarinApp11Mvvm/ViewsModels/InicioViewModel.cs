@@ -68,7 +68,7 @@ namespace XamarinApp11Mvvm.ViewsModels
                 Notificacoes.Add("O número de rodadas deve ser par.");
             }
 
-            if (Jogo.TempoPalavra <= 30)
+            if (Jogo.TempoPalavra < 30)
             {
                 Notificacoes.Add("O tempo de resposta deve ser de no minimo 30 segundos.");
             }

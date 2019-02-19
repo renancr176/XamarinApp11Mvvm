@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -23,6 +25,7 @@ namespace XamarinApp11Mvvm.ViewsModels
         private ISimpleAudioPlayer _successPlayer;
         private ISimpleAudioPlayer _timeoutPlayer;
         private int _rodadaAtual = 0;
+        private List<PalavraModel> _palavrasUtilizadas;
 
         public JogoModel Jogo { get; private set; }
         public Command MostrarCommand { get; private set; }
@@ -39,6 +42,7 @@ namespace XamarinApp11Mvvm.ViewsModels
             {
                 _conteudoExibido = value;
                 OnPropertyChanged("ConteudoExibido");
+                OnPropertyChanged("Palavra"); 
             }
         }
         private bool _btnMotrarExibido;
@@ -49,16 +53,14 @@ namespace XamarinApp11Mvvm.ViewsModels
             {
                 _btnMotrarExibido = value;
                 OnPropertyChanged("BtnMostrarExibido");
+                OnPropertyChanged("LblSignificadoExibido"); 
             }
         }
-        private string _palavraPontuacao;
-        public string PalavraPontuacao
+        public bool LblSignificadoExibido
         {
-            get { return _palavraPontuacao; }
-            private set
+            get
             {
-                _palavraPontuacao = value;
-                OnPropertyChanged("PalavraPontuacao");
+                return !_btnMotrarExibido;
             }
         }
         private bool _conteudoJogoValendo;
@@ -92,10 +94,17 @@ namespace XamarinApp11Mvvm.ViewsModels
                 OnPropertyChanged("TempoPalavra");
             }
         }
-        private string _palavra;
-        public string Palavra
+        private PalavraModel _palavra;
+        public PalavraModel Palavra
         {
-            get { return _palavra; }
+            get
+            {
+                if (!_conteudoExibido && !_conteudoJogoValendo)
+                {
+                    return new PalavraModel(_palavra.Id, new String('*', _palavra.Palavra.Length), "", NivelDificuldade);
+                }
+                return _palavra;
+            }
             private set
             {
                 _palavra = value;
@@ -103,9 +112,9 @@ namespace XamarinApp11Mvvm.ViewsModels
             }
         }
 
-
         public JogoViewModel()
         {
+            _palavrasUtilizadas = new List<PalavraModel>();
             BtnMostrarExibido = true;
             ConteudoExibido = false;
             ConteudoJogoValendo = false;
@@ -148,7 +157,6 @@ namespace XamarinApp11Mvvm.ViewsModels
         {
             BtnMostrarExibido = false;
             ConteudoExibido = true;
-            Palavra = PalavraDificuldade();
         }
 
         private void Iniciar()
@@ -207,7 +215,11 @@ namespace XamarinApp11Mvvm.ViewsModels
         {
             BtnMostrarExibido = true;
             ConteudoJogoValendo = false;
-            _rodadaAtual++;
+
+            if (NumeroGrupo == 0 || NumeroGrupo == 2)
+            {
+                _rodadaAtual++;
+            }
 
             if (_rodadaAtual > Jogo.Rodadas)
             {
@@ -215,7 +227,10 @@ namespace XamarinApp11Mvvm.ViewsModels
                     _countdownThreadSourceToken.Cancel();
                 }
                 JogoRepository.Jogo = Jogo;
-                App.Current.MainPage = new ResultadoView();
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    App.Current.MainPage = new ResultadoView();
+                });
             }
 
             if (NumeroGrupo != 0 && NumeroGrupo == 2)
@@ -226,7 +241,19 @@ namespace XamarinApp11Mvvm.ViewsModels
             NumeroGrupo = ((NumeroGrupo == 0 || NumeroGrupo == 2) ? 1 : 2);
             NomeGrupo = $"Grupo: {Jogo.GetGrupo(NumeroGrupo).Nome}";
             TempoPalavra = Jogo.TempoPalavra;
-            Palavra = "************";
+            Random rnd = new Random();
+            var palavrasNaoUtilizadas = DicionarioRepository.Dicionario
+                .Where(dp =>
+                    dp.NivelDificuldade == NivelDificuldade 
+                &&  !_palavrasUtilizadas.Exists(pu => pu.Id == dp.Id)
+                )
+                .ToList();
+
+            var indiceAleatorio = rnd.Next(palavrasNaoUtilizadas.Count);
+            var palavra = palavrasNaoUtilizadas[indiceAleatorio];
+
+            Palavra = palavra;
+            _palavrasUtilizadas.Add(palavra);
         }
 
         private void SetNivelDificuldade()
@@ -240,28 +267,19 @@ namespace XamarinApp11Mvvm.ViewsModels
                 var randIndexNivel = rnd.Next(niveis.Count);
                 NivelDificuldade = niveis[randIndexNivel];
             }
+        }
+    }
 
-            PalavraPontuacao = $"Palavra - Pontuação {NivelDificuldade.Pontos}";
+    public class PontuacaoPalavraConvert : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return $"Palavra - Pontuação {value}";
         }
 
-        private string PalavraDificuldade()
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string palavra = "";
-
-            if (NivelDificuldade == NivelEnum.Facil)
-            {
-                palavra = "Palavra Fácil";
-            }
-            else if (NivelDificuldade == NivelEnum.Medio)
-            {
-                palavra = "Palavra Média";
-            }
-            else
-            {
-                palavra = "Palavra Dificil";
-            }
-
-            return palavra;
+            return null;
         }
     }
 }

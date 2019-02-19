@@ -27,7 +27,10 @@ namespace XamarinApp11Mvvm.Views
                     {
                         var notificacoes = string.Join("\n", _inicrioViewModel.Notificacoes.Select(notificacao => notificacao+"\n"));
                         _inicrioViewModel.Notificacoes.Clear();
-                        DisplayAlert("Notificações", notificacoes, "Ok");
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            DisplayAlert("Notificações", notificacoes, "Ok");
+                        });
                     }
                 }
 
